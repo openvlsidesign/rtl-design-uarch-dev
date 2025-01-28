@@ -1,4 +1,4 @@
-`include "config_timer.sv"
+
 module traffic_controller_top #(
     parameter CLOCK_TIME = 30
 )
@@ -31,12 +31,7 @@ always_ff@(posedge clk) begin
         ped_req_reg <= pedestrian_walk ? 1'b0 : ped_req_reg; //if ped request in granted deassert the reg else it holds value
 end
 
-always_comb begin
-    red_trigger     =   cs==T_RED;
-    yellow_trigger  =   cs==T_YELLOW;
-    green_trigger   =   cs==T_GREEN;
-    ped_trigger     =   cs==P_WALK;
-end
+
 
 config_timer #(
     .CLOCK_TIME(30)
@@ -82,37 +77,44 @@ config_timer_ped (
     .signal_change  (ped_done)
 );
 
-typedef enum logic { 
-    IDLE, T_RED, T_YELLOW, T_GREEN, P_WALK, P_RED, EMERGENCY;
+typedef enum logic [2:0] { 
+    T_RED, T_YELLOW, T_GREEN, P_WALK, P_RED, EMERGENCY
  } state_t;
 
  state_t cs, ns;
 
 always_ff @(posedge clk) begin
     if(~rst_n)
-        cs <= IDLE;
+        cs <= T_RED;
     else
         cs <= ns;
 end
 
 always_comb begin
-    case (cs):
-        IDLE:       ns = T_RED;
-                    //signal assignments
-                    traffic_red = 1'b0;
-                    traffic_yellow = 1'b0;
-                    traffic_green = 1'b0;
-                    pedestrian_walk = 1'b0;
-                    pedestrian_dont_walk = ~pedestrian_walk;
-
-        T_RED:      //next state logic
+    //Default values
+    traffic_red = 1'b1;
+    traffic_yellow = 1'b0;
+    traffic_green = 1'b0;
+    pedestrian_walk = 1'b0;
+    pedestrian_dont_walk = ~pedestrian_walk;
+    case (cs)
+        T_RED:  begin    
+                    //next state logic
                     if(emergency) begin
                         ns = EMERGENCY;
                     end
-                    else  begin  if (pedestrian_request | ped_req_reg)
-                                ns = P_WALK;
-                            else ns = red_done ? T_GREEN : T_RED;
-                    end
+                    else    begin 
+                                if (pedestrian_request || ped_req_reg) begin
+                                    ns = P_WALK;
+                                end
+                                else begin 
+                                    if(red_done)
+                                        ns = T_GREEN;
+                                    else
+                                        ns = T_RED;
+                                end
+                            end
+                    
 
                     //signal assignments
                     traffic_red = 1'b1;
@@ -120,20 +122,27 @@ always_comb begin
                     traffic_green = 1'b0;
                     pedestrian_walk = 1'b0;
                     pedestrian_dont_walk = ~pedestrian_walk;
+                end
 
-        P_WALK:     if(emergency)
+        P_WALK: begin    
+        
+                    if(emergency)
                         ns = EMERGENCY;
-                    else
-                        ns = ped_done ? P_RED : P_WALK;
+                    else if (ped_done)
+                        ns = P_RED ; 
+                        else
+                        ns = P_WALK;
 
                     //signal assignments
-                    traffic_red = 1'b0;
+                    traffic_red = 1'b1;
                     traffic_yellow = 1'b0;
                     traffic_green = 1'b0;
                     pedestrian_walk = 1'b1;
                     pedestrian_dont_walk = ~pedestrian_walk;
+                end
                     
-        P_RED:      if(emergency)
+        P_RED:  begin    
+                    if(emergency)
                         ns = EMERGENCY;
                     else
                         ns = T_GREEN;
@@ -144,11 +153,15 @@ always_comb begin
                     traffic_green = 1'b0;
                     pedestrian_walk = 1'b0;
                     pedestrian_dont_walk = ~pedestrian_walk;
+                end
 
-        T_GREEN:    if(emergency)
+        T_GREEN:    begin
+                    if(emergency)
                         ns = EMERGENCY;
-                    else
-                        ns = grn_done ? T_YELLOW : T_GREEN;
+                    else if (grn_done)
+                        ns = T_YELLOW ; 
+                        else
+                        ns = T_GREEN;
 
                     //signal assignments
                     traffic_red = 1'b0;
@@ -156,24 +169,30 @@ always_comb begin
                     traffic_green = 1'b1;
                     pedestrian_walk = 1'b0;
                     pedestrian_dont_walk = ~pedestrian_walk;
+                    end
 
-        T_YELLOW:   if(emergency)
-                        ns = EMERGENCY
-                    else    
-                        ns = ylw_done ? T_RED : T_YELLOW;
+        T_YELLOW:   begin
+                    if(emergency)
+                        ns = EMERGENCY;
+                    else if(ylw_done)   
+                        ns = T_RED ;
+                        else
+                        ns = T_YELLOW;
                     //signal assignments
                     traffic_red = 1'b0;
                     traffic_yellow = 1'b1;
                     traffic_green = 1'b0;
                     pedestrian_walk = 1'b0;
                     pedestrian_dont_walk = ~pedestrian_walk;
+                    end
 
-        EMERGENCY:  if(emergency)
-                        ns = EMERGENCY
+        EMERGENCY:  begin
+                    if(emergency)
+                        ns = EMERGENCY;
                     else    if(ped_req_reg)
-                                ns = P_WALK
+                                ns = P_WALK;
                             else
-                                ns = T_RED
+                                ns = T_RED;
 
                     //signal assignments
                     traffic_red = 1'b0;
@@ -181,10 +200,16 @@ always_comb begin
                     traffic_green = 1'b0;
                     pedestrian_walk = 1'b0;
                     pedestrian_dont_walk = ~pedestrian_walk;
-
+                    end
+        default:    ns=T_RED;
     endcase
 end
-
+always_comb begin
+    red_trigger     =   cs==T_RED;
+    yellow_trigger  =   cs==T_YELLOW;
+    green_trigger   =   cs==T_GREEN;
+    ped_trigger     =   cs==P_WALK;
+end
 
 endmodule
 
