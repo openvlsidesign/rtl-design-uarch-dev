@@ -1,0 +1,8 @@
+Project: Traffic Light Controller with Pedestrian Crossing
+        • Details:
+            • Design a traffic light controller with support for pedestrian signals.
+            • Include timer-based state transitions and emergency stop functionality.
+        • Key Deliverables:
+            • RTL design in Verilog/SystemVerilog.
+            • Testbench with edge cases and timing analysis.
+            • Waveform screenshots to verify transitions.
