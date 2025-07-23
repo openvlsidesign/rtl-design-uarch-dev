@@ -1,0 +1,98 @@
+#! /opt/homebrew/Cellar/icarus-verilog/12.0/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/system.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/va_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2009.vpi";
+S_0x13e704b70 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_0x13e704ce0 .scope module, "tb_seq_gen" "tb_seq_gen" 3 1;
+ .timescale 0 0;
+v0x600001020a20_0 .var "clk", 0 0;
+v0x600001020ab0_0 .var "reset", 0 0;
+v0x600001020b40_0 .net "seq_o", 31 0, L_0x600000920770;  1 drivers
+S_0x13e704290 .scope module, "uut" "seq_generator" 3 8, 4 1 0, S_0x13e704ce0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "clk";
+    .port_info 1 /INPUT 1 "reset";
+    .port_info 2 /OUTPUT 32 "seq_o";
+L_0x600000920690 .functor BUFZ 32, v0x600001020750_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+L_0x600000920700 .functor BUFZ 32, v0x600001020870_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+L_0x600000920770 .functor BUFZ 32, v0x600001020630_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+v0x600001020510_0 .net "clk", 0 0, v0x600001020a20_0;  1 drivers
+v0x6000010205a0_0 .net "d0_in", 31 0, L_0x600000920690;  1 drivers
+v0x600001020630_0 .var "d0_out", 31 0;
+v0x6000010206c0_0 .net "d1_in", 31 0, L_0x600000920700;  1 drivers
+v0x600001020750_0 .var "d1_out", 31 0;
+v0x6000010207e0_0 .net "d2_in", 31 0, L_0x600001320140;  1 drivers
+v0x600001020870_0 .var "d2_out", 31 0;
+v0x600001020900_0 .net "reset", 0 0, v0x600001020ab0_0;  1 drivers
+v0x600001020990_0 .net "seq_o", 31 0, L_0x600000920770;  alias, 1 drivers
+E_0x600003725180 .event posedge, v0x600001020900_0, v0x600001020510_0;
+L_0x600001320140 .arith/sum 32, v0x600001020750_0, v0x600001020630_0;
+    .scope S_0x13e704290;
+T_0 ;
+    %wait E_0x600003725180;
+    %load/vec4 v0x600001020900_0;
+    %flag_set/vec4 8;
+    %jmp/0xz  T_0.0, 8;
+    %pushi/vec4 0, 0, 32;
+    %assign/vec4 v0x600001020630_0, 0;
+    %pushi/vec4 1, 0, 32;
+    %assign/vec4 v0x600001020750_0, 0;
+    %pushi/vec4 1, 0, 32;
+    %assign/vec4 v0x600001020870_0, 0;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/vec4 v0x6000010205a0_0;
+    %assign/vec4 v0x600001020630_0, 0;
+    %load/vec4 v0x6000010206c0_0;
+    %assign/vec4 v0x600001020750_0, 0;
+    %load/vec4 v0x6000010207e0_0;
+    %assign/vec4 v0x600001020870_0, 0;
+T_0.1 ;
+    %jmp T_0;
+    .thread T_0;
+    .scope S_0x13e704ce0;
+T_1 ;
+    %vpi_call/w 3 15 "$dumpfile", "qs_seq_gen.vcd" {0 0 0};
+    %vpi_call/w 3 16 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x13e704ce0 {0 0 0};
+    %end;
+    .thread T_1;
+    .scope S_0x13e704ce0;
+T_2 ;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x600001020a20_0, 0, 1;
+T_2.0 ;
+    %delay 5, 0;
+    %load/vec4 v0x600001020a20_0;
+    %inv;
+    %store/vec4 v0x600001020a20_0, 0, 1;
+    %jmp T_2.0;
+    %end;
+    .thread T_2;
+    .scope S_0x13e704ce0;
+T_3 ;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x600001020ab0_0, 0, 1;
+    %delay 20, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x600001020ab0_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x600001020ab0_0, 0, 1;
+    %delay 600, 0;
+    %vpi_call/w 3 37 "$finish" {0 0 0};
+    %end;
+    .thread T_3;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "-";
+    "tb_seq_gen.sv";
+    "seq_generator.sv";
