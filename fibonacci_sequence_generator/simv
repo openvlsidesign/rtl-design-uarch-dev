@@ -8,76 +8,73 @@
 :vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2005_math.vpi";
 :vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/va_math.vpi";
 :vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2009.vpi";
-S_0x13b605490 .scope package, "$unit" "$unit" 2 1;
+S_0x12c605310 .scope package, "$unit" "$unit" 2 1;
  .timescale 0 0;
-S_0x13b605600 .scope module, "tb_fibonacci" "tb_fibonacci" 3 1;
+S_0x12c605480 .scope module, "tb_fibonacci" "tb_fibonacci" 3 1;
  .timescale 0 0;
-v0x6000016806c0_0 .var "clk", 0 0;
-v0x600001680750_0 .var "reset", 0 0;
-v0x6000016807e0_0 .net "seq_o", 31 0, v0x600001680630_0;  1 drivers
-S_0x13b604bb0 .scope module, "uut" "fibonacci" 3 8, 4 1 0, S_0x13b605600;
+v0x6000027287e0_0 .var "clk", 0 0;
+v0x600002728870_0 .var "reset", 0 0;
+v0x600002728900_0 .net "seq_o", 31 0, L_0x600003e28690;  1 drivers
+S_0x12c604a30 .scope module, "uut" "fibonacci" 3 8, 4 1 0, S_0x12c605480;
  .timescale 0 0;
     .port_info 0 /INPUT 1 "clk";
     .port_info 1 /INPUT 1 "reset";
     .port_info 2 /OUTPUT 32 "seq_o";
-L_0x600000f84770 .functor BUFZ 32, v0x600001680510_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
-v0x6000016802d0_0 .net "clk", 0 0, v0x6000016806c0_0;  1 drivers
-v0x600001680360_0 .net "d0_in", 31 0, L_0x600000f84770;  1 drivers
-v0x6000016803f0_0 .var "d0_out", 31 0;
-v0x600001680480_0 .net "d1_in", 31 0, L_0x600001580140;  1 drivers
-v0x600001680510_0 .var "d1_out", 31 0;
-v0x6000016805a0_0 .net "reset", 0 0, v0x600001680750_0;  1 drivers
-v0x600001680630_0 .var "seq_o", 31 0;
-E_0x600003181080 .event posedge, v0x6000016805a0_0, v0x6000016802d0_0;
-L_0x600001580140 .arith/sum 32, v0x600001680510_0, v0x6000016803f0_0;
-    .scope S_0x13b604bb0;
+L_0x600003e28620 .functor BUFZ 32, v0x600002728630_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+L_0x600003e28690 .functor BUFZ 32, v0x600002728510_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+v0x6000027283f0_0 .net "clk", 0 0, v0x6000027287e0_0;  1 drivers
+v0x600002728480_0 .net "d0_in", 31 0, L_0x600003e28620;  1 drivers
+v0x600002728510_0 .var "d0_out", 31 0;
+v0x6000027285a0_0 .net "d1_in", 31 0, L_0x600002428140;  1 drivers
+v0x600002728630_0 .var "d1_out", 31 0;
+v0x6000027286c0_0 .net "reset", 0 0, v0x600002728870_0;  1 drivers
+v0x600002728750_0 .net "seq_o", 31 0, L_0x600003e28690;  alias, 1 drivers
+E_0x600000028fc0 .event posedge, v0x6000027286c0_0, v0x6000027283f0_0;
+L_0x600002428140 .arith/sum 32, v0x600002728630_0, v0x600002728510_0;
+    .scope S_0x12c604a30;
 T_0 ;
-    %wait E_0x600003181080;
-    %load/vec4 v0x6000016805a0_0;
+    %wait E_0x600000028fc0;
+    %load/vec4 v0x6000027286c0_0;
     %flag_set/vec4 8;
     %jmp/0xz  T_0.0, 8;
     %pushi/vec4 0, 0, 32;
-    %assign/vec4 v0x600001680630_0, 0;
-    %pushi/vec4 0, 0, 32;
-    %assign/vec4 v0x6000016803f0_0, 0;
+    %assign/vec4 v0x600002728510_0, 0;
     %pushi/vec4 1, 0, 32;
-    %assign/vec4 v0x600001680510_0, 0;
+    %assign/vec4 v0x600002728630_0, 0;
     %jmp T_0.1;
 T_0.0 ;
-    %load/vec4 v0x600001680360_0;
-    %assign/vec4 v0x6000016803f0_0, 0;
-    %load/vec4 v0x600001680480_0;
-    %assign/vec4 v0x600001680510_0, 0;
-    %load/vec4 v0x6000016803f0_0;
-    %assign/vec4 v0x600001680630_0, 0;
+    %load/vec4 v0x600002728480_0;
+    %assign/vec4 v0x600002728510_0, 0;
+    %load/vec4 v0x6000027285a0_0;
+    %assign/vec4 v0x600002728630_0, 0;
 T_0.1 ;
     %jmp T_0;
     .thread T_0;
-    .scope S_0x13b605600;
+    .scope S_0x12c605480;
 T_1 ;
     %vpi_call/w 3 15 "$dumpfile", "fibonacci.vcd" {0 0 0};
-    %vpi_call/w 3 16 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x13b605600 {0 0 0};
+    %vpi_call/w 3 16 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x12c605480 {0 0 0};
     %end;
     .thread T_1;
-    .scope S_0x13b605600;
+    .scope S_0x12c605480;
 T_2 ;
     %pushi/vec4 0, 0, 1;
-    %store/vec4 v0x6000016806c0_0, 0, 1;
+    %store/vec4 v0x6000027287e0_0, 0, 1;
 T_2.0 ;
     %delay 5, 0;
-    %load/vec4 v0x6000016806c0_0;
+    %load/vec4 v0x6000027287e0_0;
     %inv;
-    %store/vec4 v0x6000016806c0_0, 0, 1;
+    %store/vec4 v0x6000027287e0_0, 0, 1;
     %jmp T_2.0;
     %end;
     .thread T_2;
-    .scope S_0x13b605600;
+    .scope S_0x12c605480;
 T_3 ;
     %pushi/vec4 1, 0, 1;
-    %store/vec4 v0x600001680750_0, 0, 1;
+    %store/vec4 v0x600002728870_0, 0, 1;
     %delay 15, 0;
     %pushi/vec4 0, 0, 1;
-    %store/vec4 v0x600001680750_0, 0, 1;
+    %store/vec4 v0x600002728870_0, 0, 1;
     %delay 600, 0;
     %vpi_call/w 3 35 "$finish" {0 0 0};
     %end;
